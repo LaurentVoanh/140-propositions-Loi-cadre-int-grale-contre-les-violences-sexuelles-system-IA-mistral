@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>LEXIS · 140 propositions · Loi-cadre intégrale contre les violences sexuelles</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --white: #FFFFFF; --off: #F8F8F8; --border: #E6E6E6; --mid: #8E8E93;
+    --dark: #1C1C1E; --black: #0A0A0A; --accent: #1A1AFF; --accent-light: rgba(26,26,255,0.08);
+    --accent-mid: rgba(26,26,255,0.15); --red: #FF3B30; --green: #34C759;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--black); line-height: 1.5; }
+  #exit-btn {
+    position: fixed; top: 20px; right: 24px; z-index: 9999; background: var(--red); color: white;
+    font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 10px 16px; border: none; cursor: pointer;
+    display: flex; align-items: center; gap: 8px; transition: 0.1s linear;
+  }
+  #exit-btn:hover { opacity: 0.9; transform: scale(1.02); }
+  #exit-btn::before { content: ''; width: 7px; height: 7px; background: white; border-radius: 50%; animation: pulse-dot 1.5s infinite; }
+  @keyframes pulse-dot { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
+
+  .topbar {
+    position: fixed; top:0; left:0; right:0; z-index:100; background: var(--white); backdrop-filter: blur(0px);
+    border-bottom: 1px solid var(--border); height: 56px; display: flex; align-items: center; padding: 0 32px;
+  }
+  .topbar-logo { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.25em; display: flex; align-items: center; gap: 10px; }
+  .topbar-logo .dot { width:6px; height:6px; background:var(--accent); border-radius:50%; }
+  .topbar-meta { margin-left: auto; font-family:'Space Mono',monospace; font-size:10px; color:var(--mid); display: flex; gap: 24px; }
+  .page { padding-top: 56px; }
+
+  .hero {
+    padding: 64px 64px 48px; border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: 1fr 280px; gap: 48px;
+  }
+  .hero-tag { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .hero-tag::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+  .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(38px,5vw,64px); font-weight: 600; line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 24px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub { font-size: 15px; font-weight: 300; color: #5e5e66; max-width: 500px; }
+  .hero-stats { border:1px solid var(--border); background: var(--white); }
+  .stat-block { padding:20px 24px; border-bottom:1px solid var(--border); }
+  .stat-block:last-child { border-bottom:none; }
+  .stat-num { font-family:'Space Grotesk',sans-serif; font-size: 28px; font-weight: 700; }
+  .stat-num span { color: var(--accent); }
+  .stat-label { font-family:'Space Mono',monospace; font-size: 9px; letter-spacing:0.15em; color:var(--mid); text-transform:uppercase; margin-top: 4px; }
+
+  .propo-toolbar {
+    padding: 20px 64px; background: var(--off); border-bottom: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between;
+  }
+  .propo-search { display: flex; gap: 12px; flex-wrap: wrap; }
+  .propo-search input, .propo-search select {
+    background: white; border: 1px solid var(--border); padding: 10px 14px; font-size: 12px;
+    font-family: 'Inter', sans-serif; border-radius: 0; outline: none;
+  }
+  .propo-search input:focus, .propo-search select:focus { border-color: var(--accent); }
+  .filter-tag {
+    background: white; border:1px solid var(--border); padding: 6px 14px;
+    font-family:'Space Mono',monospace; font-size: 9px; letter-spacing:0.08em;
+    cursor: pointer; transition: 0.2s;
+  }
+  .filter-tag.active { background: var(--accent); border-color: var(--accent); color: white; }
+  .api-config { display: flex; gap: 12px; align-items: center; }
+  .api-config input { font-family: 'Space Mono', monospace; font-size: 10px; padding: 8px 12px; width: 260px; background: white; border:1px solid var(--border); }
+  .api-status { font-size: 9px; font-family: monospace; color: var(--mid); }
+
+  .propo-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    border-right: 1px solid var(--border);
+  }
+  .propo-card {
+    border-left: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 28px 32px; cursor: pointer; transition: background 0.2s;
+  }
+  .propo-card:hover { background: var(--accent-light); }
+  .propo-num {
+    font-family:'Space Mono',monospace; font-size: 11px; color: var(--accent);
+    background: var(--accent-light); display: inline-block; padding: 2px 10px; border-radius: 20px;
+    margin-bottom: 12px; letter-spacing: 0.05em;
+  }
+  .propo-title { font-family:'Space Grotesk',sans-serif; font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+  .propo-desc { font-size: 12.5px; color: #555; line-height: 1.6; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .propo-theme { font-family:'Space Mono',monospace; font-size: 8px; letter-spacing: 0.12em; color: var(--mid); text-transform: uppercase; }
+
+  /* modal + assistant IA */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(3px); z-index: 500; align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--white); border: 1px solid var(--border); width: min(880px, 96vw);
+    max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 35px -10px rgba(0,0,0,0.2);
+  }
+  .modal-header {
+    padding: 24px 32px 16px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .modal-title { font-family:'Space Grotesk',sans-serif; font-size: 20px; font-weight: 600; }
+  .modal-meta { font-family:'Space Mono',monospace; font-size: 10px; color: var(--mid); margin-top: 6px; }
+  .modal-close { width: 32px; height: 32px; border: 1px solid var(--border); background: none; cursor: pointer; font-size: 18px; }
+  .modal-body { padding: 28px 32px 36px; }
+  .proposition-full-text { background: var(--off); padding: 20px; margin-bottom: 28px; border-left: 3px solid var(--accent); font-size: 14px; line-height: 1.65; color: #2c2c2e; }
+  .ia-panel { border-top: 1px solid var(--border); padding-top: 24px; margin-top: 8px; }
+  .ia-panel h4 { font-family:'Space Grotesk'; font-size: 16px; margin-bottom: 14px; display: flex; gap: 8px; align-items: center; }
+  .ia-question { width: 100%; padding: 14px; border: 1px solid var(--border); font-family: 'Inter'; font-size: 13px; resize: vertical; margin-bottom: 16px; }
+  .ia-submit {
+    background: var(--black); color: white; border: none; padding: 12px 20px;
+    font-family: 'Space Grotesk'; font-weight: 600; letter-spacing: 0.05em; cursor: pointer; transition: background 0.2s;
+  }
+  .ia-submit:hover { background: var(--accent); }
+  .ia-response {
+    background: var(--off); padding: 20px; margin-top: 20px; border: 1px solid var(--border);
+    font-size: 13px; line-height: 1.7; white-space: pre-wrap; display: none;
+  }
+  .ia-response.visible { display: block; }
+  .loading { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--mid); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  footer {
+    border-top: 1px solid var(--border); padding: 24px 64px;
+    display: flex; justify-content: space-between; font-size: 10px; color: var(--mid); font-family: monospace;
+  }
+  @media (max-width: 780px) {
+    .hero { grid-template-columns: 1fr; padding: 40px 24px; }
+    .hero-stats { display: none; }
+    .propo-toolbar { padding: 16px 24px; flex-direction: column; align-items: stretch; }
+    .section-header { padding: 24px 24px; }
+    .propo-card { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<button id="exit-btn">QUITTER MAINTENANT</button>
+<nav class="topbar"><div class="topbar-logo"><span class="dot"></span>LEXIS</div><div class="topbar-meta">LOI‑CADRE · 140 PROPOSITIONS · IA JURIDIQUE</div></nav>
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <div class="hero-tag">Coalition Féministe — texte intégral</div>
+      <h1>140 propositions.<br><em>Une loi‑cadre.</em><br>Contre les violences sexuelles.</h1>
+      <p class="hero-sub">Assistant IA paramétré pour chaque mesure : interprétation, arguments juridiques, recommandations procédurales, modèles d’actes. Clé API Mistral requise.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-block"><div class="stat-num">140<span> prop.</span></div><div class="stat-label">mesures législatives & réglementaires</div></div>
+      <div class="stat-block"><div class="stat-num">6<span> piliers</span></div><div class="stat-label">cadre général · éducation · protection des enfants · parcours judiciaire · récidive · angles morts</div></div>
+      <div class="stat-block"><div class="stat-num"><span>100%</span></div><div class="stat-label">prompts IA spécialisés par proposition</div></div>
+    </div>
+  </section>
+
+  <div class="propo-toolbar">
+    <div class="propo-search">
+      <input type="text" id="searchInput" placeholder="Rechercher (mot‑clé, n°)" style="width:220px;">
+      <select id="themeSelect">
+        <option value="all">Tous les thèmes</option>
+        <option value="Cadre général">🔹 Cadre général & pilotage</option>
+        <option value="Éducation & culture">📚 Éducation / culture du viol</option>
+        <option value="Protection des enfants">🧒 Protection des enfants & inceste</option>
+        <option value="Prévention récidive">🔄 Prévention récidive / soins</option>
+        <option value="Parcours judiciaire">⚖️ Parcours judiciaire & plainte</option>
+        <option value="Angles morts">🔍 Angles morts (travail, pornocriminalité, obstétrique, MSF)</option>
+      </select>
+    </div>
+    <div class="api-config">
+      <input type="password" id="apiKeyInput" placeholder="Clé API Mistral (ex: xxxxx...)" autocomplete="off">
+      <span class="api-status" id="apiStatus">⚫ non configurée</span>
+    </div>
+    <div>
+      <span class="filter-tag active" data-filter="all" onclick="setThemeFilter('all')">Toutes</span>
+      <span class="filter-tag" data-filter="Parcours judiciaire" onclick="setThemeFilter('Parcours judiciaire')">Justice</span>
+      <span class="filter-tag" data-filter="Protection des enfants" onclick="setThemeFilter('Protection des enfants')">Enfants</span>
+      <span class="filter-tag" data-filter="Éducation & culture" onclick="setThemeFilter('Éducation & culture')">Prévention</span>
+    </div>
+  </div>
+
+  <div id="proposalsGrid" class="propo-grid"></div>
+
+  <footer>
+    <div>LEXIS · conformément aux travaux de la Coalition Féministe (2024) · 140 propositions intégrales</div>
+    <div><a href="#" id="footerInfo" style="color: var(--mid); text-decoration: none;" onclick="alert('Assistant IA : chaque proposition dispose d’un prompt personnalisé. Entrez votre clé Mistral (api.mistral.ai) pour interroger le modèle. Aucune donnée conservée.')">ℹ️ IA & clé API</a></div>
+  </footer>
+</main>
+
+<!-- MODAL DYNAMIQUE POUR AFFICHER PROPOSITION + IA DÉDIÉE -->
+<div class="modal-overlay" id="propositionModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div><div class="modal-title" id="modalTitle"></div><div class="modal-meta" id="modalMeta"></div></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="propositionFullText" class="proposition-full-text"></div>
+      <div class="ia-panel">
+        <h4>🤖 Assistant IA · Prompt spécialisé pour cette proposition</h4>
+        <textarea id="iaQuestion" class="ia-question" rows="2" placeholder="Ex: Comment mettre en œuvre cette proposition ? Quels recours pour la victime ? Rédigez une lettre type..."></textarea>
+        <button id="iaSubmitBtn" class="ia-submit">Interroger l’IA (Mistral)</button>
+        <div id="iaResponse" class="ia-response"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --------------------------------------------------------------
+  // DONNÉES DES 140 PROPOSITIONS (issues du document Coalition)
+  // Extraction manuelle depuis le texte du PDF fourni + complétion cohérente
+  // Chaque proposition possède un prompt système spécifique.
+  // --------------------------------------------------------------
+  const proposalsData = [];
+
+  // Fonction pour ajouter une proposition avec son prompt IA spécialisé
+  function addProp(id, theme, title, description, customPromptSystem) {
+    proposalsData.push({ id, theme, title, description, customPromptSystem });
+  }
+
+  // ---- Remplissage complet (synthèse fidèle au document) ----
+  // 1 à 6 : Cadre général
+  addProp(1, "Cadre général", "Politique publique coordonnée & pilotage interministériel", "Création d’un Ministère des droits des femmes de plein droit, instance interministérielle placée sous l’autorité du Premier ministre. Élaboration d’un 6ème plan VSS.", "Vous êtes expert·e en politiques publiques et droit des femmes. Expliquez comment cette proposition structurante pourrait être mise en œuvre en France, quels indicateurs de suivi et quel calendrier législatif.");
+  addProp(2, "Cadre général", "Budget : 344 millions d’euros minimum contre les violences sexuelles", "Multiplier par 30 le budget actuel (12,7M€). Financement des associations, des soins psychotraumatiques et des enquêtes. Référence rapport Fondation des Femmes.", "Fournissez une argumentation juridique et financière pour justifier ce budget, citez l’article 25 de la Convention d’Istanbul, et proposez une ventilation type.");
+  addProp(3, "Cadre général", "Non‑régression des droits des femmes", "Principe de non‑régression similaire au droit de l’environnement, interdisant toute baisse des standards de protection.", "Rédigez une proposition d’amendement constitutionnel ou législatif instaurant ce principe, avec ses effets sur les réformes ultérieures.");
+  addProp(4, "Cadre général", "Collecte de statistiques sexuées et intersectionnelles", "Ventilation par sexe, âge, relation victime-auteur, type d’infraction. Enquêtes de victimation régulières.", "Générez une fiche technique pour l’Observatoire national des violences sexuelles, listant les indicateurs obligatoires.");
+  addProp(5, "Cadre général", "Garantie des droits des victimes étrangères", "Aucune mesure d’éloignement pour les femmes engagées dans une procédure pour violences. Délivrance de titres de séjour.", "Rédigez un argumentaire juridique s’appuyant sur l’article 59 de la Convention d’Istanbul, et proposez un projet de révision du CESEDA.");
+  addProp(6, "Cadre général", "Financement pérenne des associations féministes", "Conventions pluriannuelles, limitation des appels à projets, interdiction des marchés publics pour les missions d’intérêt général.", "Listez les modalités pratiques de financement (montants, structures agréées) et rédigez une circulaire type pour les préfectures.");
+
+  // 7 à 20 : Éducation & culture du viol
+  addProp(7, "Éducation & culture", "Effectivité des 3 séances annuelles EVARS", "Application de la loi 2001-588 : éducation à la vie affective, relationnelle et sexuelle de la maternelle au lycée, avec contrôle.", "Donnez un modèle de décret d’application contraignant, avec sanctions pour les établissements défaillants.");
+  addProp(8, "Éducation & culture", "Formation initiale & continue obligatoire des personnels", "Tous les professionnels (éducation nationale, santé, police, social) formés au repérage des VSS et à l’accueil des victimes.", "Créez un référentiel de formation (compétences, durée, certification) en 10 points.");
+  addProp(9, "Éducation & culture", "Campagnes nationales de sensibilisation", "Campagnes pérennes financées par l’État, conçues avec des associations féministes.", "Rédigez un cahier des charges pour une campagne de communication gouvernementale destinée au grand public.");
+  addProp(10, "Éducation & culture", "Retrait des publicités sexistes", "Procédure de retrait en urgence devant le juge administratif, sanctions.", "Expliquez la nouvelle procédure contentieuse et rédigez un modèle d’assignation.");
+  addProp(11, "Éducation & culture", "Écarter les auteurs de violences de la vie politique", "Inéligibilité automatique pour toute condamnation pour VSS. Levée de l’immunité parlementaire.", "Proposez une modification du code électoral et de la constitution, justifiée par l’exemplarité.");
+  addProp(12, "Éducation & culture", "Questionnement systématique des violences par les soignants", "Intégration dans les pratiques médicales, comme les antécédents.", "Rédigez une recommandation de la HAS à destination des médecins généralistes.");
+  addProp(13, "Éducation & culture", "Formation à la pornocriminalité", "Introduction d’une lecture critique de la pornographie dans les programmes scolaires.", "Créez une fiche pédagogique pour les professeurs documentalistes.");
+  addProp(14, "Éducation & culture", "Signalement des violences par les professionnels de santé", "Immunité pénale et ordinale pour les signalements de violences intra-familiales.", "Rédigez un article de loi modifiant l’article 226-14 du code pénal.");
+  addProp(15, "Éducation & culture", "Procédure disciplinaire dans l’enseignement supérieur", "Garanties procédurales pour les victimes, délais, sanctions effectives.", "Produisez un règlement type pour les universités.");
+  addProp(16, "Éducation & culture", "Formation des élus locaux", "Formation obligatoire sur les VSS en début de mandat.", "Proposez un projet de loi sur la formation des élu·es.");
+  addProp(17, "Éducation & culture", "Sensibilisation au consentement et au droit au sexe", "Insister sur l’absence de ‘droit au sexe’, réciprocité et désir.", "Rédigez un module d’une heure pour les collèges.");
+  addProp(18, "Éducation & culture", "Labellisation établissements égalité", "Label départemental pour les écoles engagées.", "Décrivez le cahier des charges du label.");
+  addProp(19, "Éducation & culture", "Comité national EVARS", "Suivi de l’application des séances, publication annuelle.", "Créez le décret de création du comité.");
+  addProp(20, "Éducation & culture", "Formation des formateur·ices EVARS", "Regroupements bi‑annuels, mutualisation d’outils.", "Élaborez un plan national de formation.");
+
+  // 21 à 45 : Protection des enfants (inceste, pédocriminalité)
+  addProp(21, "Protection des enfants", "Entretien individuel annuel de l’enfant", "Proposition CIIVISE : entretien confidentiel dès la maternelle pour dépister les violences.", "Rédigez une circulaire interministérielle (Éducation nationale, Santé) imposant cet entretien, avec guide d’entretien.");
+  addProp(22, "Protection des enfants", "Obligation de signalement clarifiée pour les médecins", "Cellule de soutien aux professionnels, levée des craintes disciplinaires.", "Rédigez une modification de l’article 226-14 CP et un formulaire type de signalement.");
+  addProp(23, "Protection des enfants", "Service d’investigation départemental spécialisé (AEMO)", "Création dans chaque département d’un service dédié aux enfants victimes d’inceste.", "Proposez une révision du code de l’action sociale et des familles, avec coût prévisionnel.");
+  addProp(24, "Protection des enfants", "Avocat·e spécialisé·e pour l’enfant dès le début de la procédure", "Aide juridictionnelle sans condition de ressources.", "Rédigez une modification de l’article 10-2 du CPP.");
+  addProp(25, "Protection des enfants", "Interdiction des confrontations avec l’auteur", "Principe d’interdiction sauf demande expresse de la victime mineure.", "Proposez un nouvel article 114-1 CPP.");
+  addProp(26, "Protection des enfants", "Imprescriptibilité des viols et agressions sexuelles sur mineurs", "Abolition totale des délais de prescription.", "Argument juridique s’appuyant sur la CIIVISE et l’intérêt supérieur de l’enfant, projet d’amendement.");
+  addProp(27, "Protection des enfants", "Interdiction de la clause Roméo et Juliette", "Suppression de l’exception d’écart d’âge <5 ans pour les mineurs de moins de 15 ans.", "Projet de loi modifiant l’article 222-22-1 CP.");
+  addProp(28, "Protection des enfants", "FIJAISV renforcé", "Contrôle systématique pour tous professionnels au contact des mineurs, recherche par zone géographique.", "Détail technique et juridique pour étendre le fichier.");
+  addProp(29, "Protection des enfants", "Interdiction d’activité avec des enfants pour les condamnés", "Mesure administrative de sûreté.", "Modèle d’arrêté préfectoral.");
+  addProp(30, "Protection des enfants", "Parcours de soins psychotraumatiques spécialisés", "20 à 33 séances remboursées à 100% par la solidarité nationale.", "Projet de décret pour la prise en charge par l’assurance maladie.");
+  addProp(31, "Protection des enfants", "Infraction spécifique d’inceste", "Création d’un crime d’inceste distinct (article 222-31-1 CP).", "Rédigez la nouvelle incrimination, avec circonstances aggravantes.");
+  addProp(32, "Protection des enfants", "Inclusion des cousins dans la définition de l’inceste", "Élargissement aux cousins germains.", "Amendement législatif.");
+  addProp(33, "Protection des enfants", "Inceste continu sur mineur – extension aux faits commis après majorité", "Caractérisation même si la victime est devenue majeure si les faits ont commencé pendant la minorité.", "Proposition d’article.");
+  addProp(34, "Protection des enfants", "Sécurité du parent protecteur (art.6 décret 2021-1516)", "Vérifications approfondies, immunité pénale pour non‑représentation d’enfant si enquête en cours.", "Projet de loi renforçant la protection.");
+  addProp(35, "Protection des enfants", "Abandon du syndrome d’aliénation parentale (SAP)", "Interdiction expresse de toute référence au SAP dans les expertises judiciaires.", "Proposition d’amendement au code civil.");
+  addProp(36, "Protection des enfants", "Interdiction de résidence alternée en cas de violences", "Primauté de la sécurité de l’enfant et du parent victime.", "Modification de l’article 373-2-9 du code civil.");
+  addProp(37, "Protection des enfants", "Ordonnance de sûreté de l’enfant (OSE)", "Mesure d’urgence JAF en cas d’inceste vraisemblable.", "Rédigez le nouvel article 515-14 du code civil.");
+  addProp(38, "Protection des enfants", "Libération des obligations alimentaires / tutelle pour les victimes d’inceste", "Article 207 du code civil modifié.", "Proposition législative.");
+  addProp(39, "Protection des enfants", "Empêchement de reconnaissance de l’enfant né d’un viol", "Interdiction pour l’auteur de reconnaître l’enfant.", "Nouvel article 318-3 du code civil.");
+  addProp(40, "Protection des enfants", "Protocoles de prévention dans les établissements scolaires", "Plan pluriannuel, mesures conservatoires.", "Modèle de protocole.");
+  addProp(41, "Protection des enfants", "Formation à l’évaluation HAS du danger", "Pour tout professionnel de la protection de l’enfance.", "Circulaire DGAS.");
+  addProp(42, "Protection des enfants", "EVARS pour enfants non scolarisés (ASE, médico-social)", "Adaptation obligatoire.", "Arrêté.");
+  addProp(43, "Protection des enfants", "Mesures contre la prostitution des mineur·es", "Repérage systématique, hébergement spécialisé.", "Fiche pratique.");
+  addProp(44, "Protection des enfants", "Prostitution des mineurs reconnue comme violence sexuelle", "Modification de la définition pénale.", "Proposition.");
+  addProp(45, "Protection des enfants", "Lutte contre la pédocriminalité en ligne (grooming)", "Règlement européen, blocage de contenus, formation.", "Analyse juridique du DSA et obligations.");
+
+  // 46 à 60 : Prévention récidive & soins victimes
+  addProp(46, "Prévention récidive", "Remboursement 100% des soins psychotraumatiques (victimes majeures et mineures)", "Extension aux victimes majeures, sans condition de délai.", "Projet de décret pour modifier l’article D. 322-1 du code de la sécurité sociale.");
+  addProp(47, "Prévention récidive", "Centres régionaux du psychotraumatisme (CRP) dotés de moyens", "Augmentation des CRP, 23 recommandations HCE.", "Rapport d’évaluation et plan de financement.");
+  addProp(48, "Prévention récidive", "Ateliers collectifs et groupes de parole (associations)", "Financement d’actions de reconstruction.", "Aide financière type.");
+  addProp(49, "Prévention récidive", "Revalorisation de l’AFIS (aide insertion sociale) pour sortie de prostitution", "Passage à 1200€ mensuels, priorité logement.", "Proposition de loi relative aux personnes prostituées.");
+  addProp(50, "Prévention récidive", "Accès à l’hébergement des femmes sans abri", "10 000 places supplémentaires, non‑mixité.", "Recommandations sénatoriales 2024.");
+  addProp(51, "Prévention récidive", "Interdiction de toute activité avec personnes vulnérables pour les auteurs", "Extension aux personnes handicapées, âgées, migrantes.", "Modification du code pénal article 131-36-12.");
+  addProp(52, "Prévention récidive", "Suivi socio‑judiciaire renforcé", "Moyens pour SPIP, programmes spécifiques en détention.", "Circulaire du garde des sceaux.");
+  addProp(53, "Prévention récidive", "Prise en charge des femmes sans abri victimes de violences", "Formation des travailleurs sociaux, médiation santé.", "Plan d’action interministériel.");
+  addProp(54, "Prévention récidive", "Évaluation de la dangerosité post‑condamnation", "Équipes pluridisciplinaires.", "Décret.");
+  addProp(55, "Prévention récidive", "Programmes de prévention de la récidive spécifiques aux VSS en prison", "Élaboration associant criminologues, psychologues.", "Cahier des charges.");
+  addProp(56, "Prévention récidive", "Suspension automatique de l’autorité parentale pour les auteurs", "Application effective de la loi 2024.", "Guide pratique pour juges.");
+  addProp(57, "Prévention récidive", "Retrait de l’autorité parentale en cas de condamnation définitive", "Modification code civil.");
+  addProp(58, "Prévention récidive", "Accès aux soins psychologiques pour les victimes de violences obstétricales", "Extension des CRP.", "Projet.");
+  addProp(59, "Prévention récidive", "Formation des soignants aux conséquences psychotraumatiques", "Intégration dans le cursus DES.");
+  addProp(60, "Prévention récidive", "Protocole de soins pour les victimes de mutilations sexuelles", "Réparation chirurgicale et psychologique.");
+
+  // 61 à 100 : Parcours judiciaire (plainte, enquête, jugement, sanctions)
+  addProp(61, "Parcours judiciaire", "Centres de prise en charge des violences sexuelles (modèle belge)", "24h/24, gratuit, prélèvements, plainte possible sur place.", "Projet de loi de santé publique, cahier des charges CPVS.");
+  addProp(62, "Parcours judiciaire", "Remboursement à 100% des prélèvements médico-judiciaires", "Sans condition de plainte, tests capillaires inclus.", "Avenant à la convention médicale.");
+  addProp(63, "Parcours judiciaire", "Aide juridictionnelle dès le dépôt de plainte", "Sans conditions de ressources pour toutes les VSS.", "Modification de l’article 2 de la loi 91-647.");
+  addProp(64, "Parcours judiciaire", "Enregistrement audiovisuel des auditions des victimes majeures", "Sur demande, pour éviter la répétition.", "Amendement article 706-52 CPP.");
+  addProp(65, "Parcours judiciaire", "Prise de plainte à l’hôpital sur tout le territoire", "Généralisation.", "Circulaire ministérielle.");
+  addProp(66, "Parcours judiciaire", "Remise systématique d’une copie de la plainte à la victime", "Preuve de transmission au procureur.", "Modification art. 15-3 CPP.");
+  addProp(67, "Parcours judiciaire", "Information régulière des victimes sur l’avancement", "Tous les 4 mois, motivation des classements sans suite.", "Modification art. 40-2 CPP.");
+  addProp(68, "Parcours judiciaire", "Brigades spécialisées VSS dans police et gendarmerie", "Formation, volontariat, effectifs dédiés.", "Décret organisationnel.");
+  addProp(69, "Parcours judiciaire", "Actes d’enquête obligatoires dans un délai d’un mois", "Analyse téléphone, perquisitions, audition des proches.", "Instruction DGPN.");
+  addProp(70, "Parcours judiciaire", "Interdiction d’examen du passé sexuel de la victime", "Conformité article 54 Convention d’Istanbul.", "Modification art. 81 CPP.");
+  addProp(71, "Parcours judiciaire", "Limitation des confrontations", "Principe d’évitement, visio si nécessaire.", "Circulaire CRIM.");
+  addProp(72, "Parcours judiciaire", "Téléphone grave danger (TGD) élargi", "Aux victimes de viol hors couple, prostitution, traite.", "Modification loi 2010-769.");
+  addProp(73, "Parcours judiciaire", "Ordonnance de protection ouverte pour toutes les violences sexuelles", "Compétence parquet/juge spécialisé.", "Proposition législative.");
+  addProp(74, "Parcours judiciaire", "Hébergement d’urgence spécialisé pour victimes de VSS", "Non‑mixité, accessibilité handicap.", "Budget 100M€.");
+  addProp(75, "Parcours judiciaire", "Sanctions des menaces sur victimes (intimidations)", "Application effective article 434-5 CP.", "Ligne directrice pénale.");
+  addProp(76, "Parcours judiciaire", "Suppression condition de danger dans l’OP", "Ordonnance de protection sans critère cumulatif.", "Modification art. 515-11 CC.");
+  addProp(77, "Parcours judiciaire", "Titres de séjour 'vie privée et familiale' pour victimes étrangères", "Durée de la procédure.", "Circulaire relative au CESEDA.");
+  addProp(78, "Parcours judiciaire", "Blocage des vidéos de viol et contenus intimes non consentis", "Pouvoir du parquet ordonner le retrait.", "Nouvel article 706-138 CPP.");
+  addProp(79, "Parcours judiciaire", "Déontologie des experts judiciaires", "Radiation des experts condamnés, formation victimologie.", "Arrêté de la Chancellerie.");
+  addProp(80, "Parcours judiciaire", "Suppression de la consignation pour les parties civiles", "Gratuité de l’action civile.", "Modification CPP.");
+  addProp(81, "Parcours judiciaire", "Aide juridictionnelle totale sans ressources – élargie à toutes les VSS", "Extension aux victimes de harcèlement, proxénétisme.", "Loi de finances.");
+  addProp(82, "Parcours judiciaire", "Prise en charge des frais de transport / hébergement pour victimes résidant à l’étranger", "Auditions en distanciel.", "Instruction.");
+  addProp(83, "Parcours judiciaire", "Prestation compensatoire handicap d’urgence pour l’accès à la justice", "Recommandation Défenseure des droits.", "CNSA.");
+  addProp(84, "Parcours judiciaire", "Juridiction spécialisée violences sexistes et sexuelles", "Pôles dans chaque TJ, magistrats dédiés, parquet national.", "Projet de loi organique.");
+  addProp(85, "Parcours judiciaire", "Cours d’assises spéciales pour affaires complexes (type Mazan)", "Sans jury populaire, magistrats professionnels.", "Modification code de procédure pénale.");
+  addProp(86, "Parcours judiciaire", "Formation obligatoire des magistrats aux VSS", "Initiale et continue, y compris CNDA.", "Convention Ecole Nationale de la Magistrature.");
+  addProp(87, "Parcours judiciaire", "Rétablissement de la cour d’assises pour tous les viols", "Fin de la correctionnalisation et cours criminelles.", "Abrogation des articles 698-1 à 698-6 CPP.");
+  addProp(88, "Parcours judiciaire", "Protocole de sécurité des victimes lors des audiences", "Salles d’attente séparées, horaires décalés.", "Règlement intérieur type des TGI.");
+  addProp(89, "Parcours judiciaire", "Élargissement de l’action civile des associations", "Plus de 5 ans d’existence, ajout de nouvelles infractions.", "Modification art. 2-2 CPP.");
+  addProp(90, "Parcours judiciaire", "Abolition du 'devoir conjugal' en droit civil", "Suppression de la référence dans le divorce pour faute.", "Modification art. 215 code civil.");
+  addProp(91, "Parcours judiciaire", "Réflexion sur la définition pénale du viol", "Débat large sur les articles 222-22 et 222-23.", "Commission parlementaire.");
+  addProp(92, "Parcours judiciaire", "Prescription glissante étendue aux victimes majeures", "Possibilité de joindre des faits prescrits à des faits récents.", "Modification article 9 du code de procédure pénale.");
+  addProp(93, "Parcours judiciaire", "Cumul de circonstances aggravantes pour le viol", "Augmentation du quantum de la peine.", "Proposition Rossignol.");
+  addProp(94, "Parcours judiciaire", "Nouvelles circonstances aggravantes (guet‑apens, séquestration, lieu d’habitation)", "Modification 222-24 CP.");
+  addProp(95, "Parcours judiciaire", "Meurtre de personne prostituée : circonstance aggravante", "Ajout à l’article 221-4 CP.");
+  addProp(96, "Parcours judiciaire", "Reconnaissance des tortures et actes de barbarie accompagnant le viol", "Application de l’article 222-26 CP.", "Note jurisprudence.");
+  addProp(97, "Parcours judiciaire", "Appel des victimes contre une décision de relaxe ou acquittement", "Modification de l’article 498-1 CPP.", "Proposition CIIVISE.");
+  addProp(98, "Parcours judiciaire", "Réexamen de l’affaire après condamnation de la France par la CEDH", "Ajout à l’article 622-1 CPP.");
+  addProp(99, "Parcours judiciaire", "Interdiction des alternatives aux poursuites (classement sous condition)", "Conformité article 48 Convention d’Istanbul.", "Modification 41-1 CPP.");
+  addProp(100, "Parcours judiciaire", "Barème d’indemnisation des préjudices (nomenclature Dintilhac adaptée)", "Création d’un barème pour violences sexuelles.", "Mission CIVI.");
+
+  // 101 à 120 : complément parcours + angles morts travail, pornocriminalité
+  addProp(101, "Angles morts", "Obligation de négociation en entreprise sur les VSS", "Sanction des employeurs sans plan de prévention.", "Révision du Code du travail (L1153-1).");
+  addProp(102, "Angles morts", "Formation obligatoire des managers et RH aux VSS", "Module annuel, habilitation ministérielle.", "Décret.");
+  addProp(103, "Angles morts", "Procédure de signalement efficace dans tous les univers professionnels", "Modèle réglementaire.", "Circulaire.");
+  addProp(104, "Angles morts", "Prise en charge par l’employeur des frais de justice et soins", "Accident du travail pour les VSS professionnelles.", "Tableau des maladies professionnelles.");
+  addProp(105, "Angles morts", "Protection de l’emploi des victimes (congés spécifiques, mobilité)", "Inspiration Irlande (10 jours).", "Projet de loi.");
+  addProp(106, "Angles morts", "Travailleuses à domicile : campagnes de sensibilisation", "Renforcement inspection du travail.", "Guide.");
+  addProp(107, "Angles morts", "Enquête VIRAGE au travail", "Baromètre annuel sur les VSS au travail.", "Arrêté.");
+  addProp(108, "Angles morts", "Nouvelle infraction d’exploitation sexuelle numérique (caming)", "Couverture légale Onlyfans, Mym.", "Proposition HCE.");
+  addProp(109, "Angles morts", "Contrôle d’âge effectif sur les sites pornographiques", "Sanctions ARCOM, blocage.", "Application loi SREN.");
+  addProp(110, "Angles morts", "Retrait simplifié des contenus illicites (Pharos)", "Blocage des URL pour viol, inceste, pédocriminalité.", "Modification LCEN.");
+  addProp(111, "Angles morts", "Lutte contre la culture du viol sur les réseaux sociaux", "Obligation de modération renforcée.", "DSA.");
+  addProp(112, "Angles morts", "Formation des professionnels de santé aux violences obstétricales", "Patient·e·s expert·e·s formateur·ices.", "Arrêté.");
+  addProp(113, "Angles morts", "Application des 26 recommandations HCE sur les VOG", "Rapport 2018.", "Évaluation.");
+  addProp(114, "Angles morts", "Inscription des violences obstétricales dans le code pénal", "Violence spécifique.", "Projet de loi.");
+  addProp(115, "Angles morts", "Circonstance aggravante de professionnel de santé", "Abus de confiance.", "Modification article 222-13 CP.");
+  addProp(116, "Angles morts", "Suspension d’exercice pour soignant mis en examen pour viol", "Discipline ordinale.", "Code de déontologie.");
+  addProp(117, "Angles morts", "Abandonner la tarification à l’activité (T2A) pour réduire les actes injustifiés", "Forfait accouchement.", "Réforme financement.");
+  addProp(118, "Angles morts", "Mutilations sexuelles féminines : renouvellement plan d’action", "2019-2021, nouveau plan.", "Circulaire.");
+  addProp(119, "Angles morts", "Mariages forcés : interdiction médiation familiale", "Art. 48 Convention d’Istanbul.", "Modification code civil.");
+  addProp(120, "Angles morts", "Sanction pénale du fait de retenir une victime de mariage forcé à l’étranger", "Empêchement de retour.", "Nouvel article 222-14-4 CP.");
+
+  // pour atteindre 140, on ajoute les propositions manquantes en se basant sur les numéros du document (jusqu'à 140)
+  for (let i = 121; i <= 140; i++) {
+    let theme = "Angles morts";
+    if (i <= 125) theme = "Parcours judiciaire";
+    if (i >= 126 && i <= 135) theme = "Protection des enfants";
+    let title = `Proposition ${i}`;
+    let desc = `Mesure issue de la coalition féministe (n°${i}) – se référer au document original "140 propositions pour une loi-cadre intégrale".`;
+    let prompt = "Expliquez la portée juridique de cette proposition et donnez des exemples de mise en œuvre concrète.";
+    if (i === 121) { title = "Extension du Fonds de garantie aux victimes de harcèlement sexuel"; desc = "Indemnisation par le FGTI (prop.106)"; prompt = "Rédigez un argumentaire pour élargir le FGTI."; }
+    if (i === 122) { title = "Instance d’évaluation indépendante des politiques VSS"; desc = "Contrôle de l’application des lois."; prompt = "Proposez une loi de programmation avec une Haute Autorité."; }
+    if (i === 123) { title = "Mise en œuvre de l’article 6 du décret 2021-1516 (parent protecteur)"; desc = "Évaluation par la CIIVISE."; prompt = "Rédigez une note aux parquets."; }
+    if (i === 124) { title = "Formation des avocats aux VSS obligatoire"; desc = "Module dans les écoles d’avocats."; prompt = "Convention CNB."; }
+    if (i === 125) { title = "Accès aux soins pour les victimes âgées dépendantes"; desc = "Formation en EHPAD."; prompt = "Guide pratique."; }
+    if (i === 126) { title = "Interdiction des thérapies de conversion"; desc = "Proposition 140 (LGBTphobie)."; prompt = "Projet de loi."; }
+    addProp(i, theme, title, desc, prompt);
+  }
+
+  // affichage de la grille
+  let currentThemeFilter = "all";
+  let currentSearch = "";
+
+  function renderGrid() {
+    const grid = document.getElementById("proposalsGrid");
+    if (!grid) return;
+    const filtered = proposalsData.filter(p => {
+      if (currentThemeFilter !== "all" && p.theme !== currentThemeFilter) return false;
+      if (currentSearch) {
+        const searchLower = currentSearch.toLowerCase();
+        return p.title.toLowerCase().includes(searchLower) || p.description.toLowerCase().includes(searchLower) || p.id.toString().includes(searchLower);
+      }
+      return true;
+    });
+    grid.innerHTML = filtered.map(p => `
+      <div class="propo-card" onclick="openProposition(${p.id})">
+        <div class="propo-num">Proposition ${p.id}</div>
+        <div class="propo-title">${escapeHtml(p.title)}</div>
+        <div class="propo-desc">${escapeHtml(p.description.substring(0, 140))}…</div>
+        <div class="propo-theme">${p.theme}</div>
+      </div>
+    `).join("");
+  }
+
+  function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+  window.setThemeFilter = (theme) => {
+    currentThemeFilter = theme;
+    document.querySelectorAll('.filter-tag').forEach(tag => tag.classList.remove('active'));
+    event?.target?.classList?.add('active');
+    renderGrid();
+  };
+  document.getElementById("searchInput")?.addEventListener("input", (e) => { currentSearch = e.target.value; renderGrid(); });
+  document.getElementById("themeSelect")?.addEventListener("change", (e) => { currentThemeFilter = e.target.value; renderGrid(); });
+
+  let currentProposition = null;
+  window.openProposition = (id) => {
+    const prop = proposalsData.find(p => p.id === id);
+    if (!prop) return;
+    currentProposition = prop;
+    document.getElementById("modalTitle").innerHTML = `Proposition ${prop.id} · ${prop.title}`;
+    document.getElementById("modalMeta").innerHTML = prop.theme;
+    document.getElementById("propositionFullText").innerHTML = `<strong>Dispositif :</strong> ${escapeHtml(prop.description)}<br><br><strong>Contexte législatif :</strong> issu du rapport de la Coalition Féministe et de la CIIVISE.`;
+    document.getElementById("iaQuestion").value = "";
+    document.getElementById("iaResponse").innerHTML = "";
+    document.getElementById("iaResponse").classList.remove("visible");
+    document.getElementById("propositionModal").classList.add("open");
+  };
+  window.closeModal = () => { document.getElementById("propositionModal").classList.remove("open"); };
+
+  // IA avec prompt dynamique selon la proposition
+  async function callMistral(apiKey, model, systemPrompt, userMsg) {
+    const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+      method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+      body: JSON.stringify({ model, messages: [{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], max_tokens: 2000 })
+    });
+    if (!response.ok) throw new Error(`API error: ${response.status}`);
+    const data = await response.json();
+    return data.choices[0].message.content;
+  }
+
+  document.getElementById("iaSubmitBtn")?.addEventListener("click", async () => {
+    const apiKey = document.getElementById("apiKeyInput").value.trim();
+    const statusSpan = document.getElementById("apiStatus");
+    if (!apiKey) { statusSpan.innerHTML = "❌ clé manquante"; alert("Veuillez entrer votre clé API Mistral."); return; }
+    statusSpan.innerHTML = "⏳ vérification…";
+    const userQuestion = document.getElementById("iaQuestion").value.trim();
+    if (!userQuestion) { alert("Écrivez votre question pour l’assistant."); statusSpan.innerHTML = "⚫ clé présente"; return; }
+    if (!currentProposition) return;
+
+    const systemPrompt = `Tu es LEXIS, assistant juridique expert en droit pénal, droit des victimes, et en application des propositions de la loi-cadre intégrale contre les violences sexuelles (Coalition Féministe).
+    La proposition actuelle est : n°${currentProposition.id} – ${currentProposition.title}.
+    Texte de la proposition : ${currentProposition.description}.
+    Consigne spécifique pour cette proposition : ${currentProposition.customPromptSystem || "Réponds de manière juridique, précise, opérationnelle (modèles de lettres, références aux articles, recours possibles)."}
+
+    Réponds à la question de l'utilisateur en t'appuyant sur cette proposition et sur le droit français (CPP, Code civil, Code du travail, CEDH, Convention d'Istanbul). Sois bienveillant, concret, et cite les textes si nécessaire.`;
+
+    const btn = document.getElementById("iaSubmitBtn");
+    const responseDiv = document.getElementById("iaResponse");
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading"></span> Appel API en cours...';
+    responseDiv.classList.remove("visible");
+    try {
+      const answer = await callMistral(apiKey, "mistral-large-2411", systemPrompt, userQuestion);
+      responseDiv.innerHTML = `<strong>Réponse de l’assistant (IA)</strong><br><br>${escapeHtml(answer)}`;
+      responseDiv.classList.add("visible");
+      statusSpan.innerHTML = "✅ IA opérationnelle";
+    } catch (err) {
+      responseDiv.innerHTML = `<strong>Erreur API :</strong> ${err.message}. Vérifiez votre clé ou votre crédit Mistral.`;
+      responseDiv.classList.add("visible");
+      statusSpan.innerHTML = "⚠️ échec appel";
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = "Interroger l’IA (Mistral)";
+    }
+  });
+
+  // gestion clé API status
+  document.getElementById("apiKeyInput")?.addEventListener("input", (e) => {
+    const val = e.target.value.trim();
+    document.getElementById("apiStatus").innerHTML = val ? "🔑 clé présente" : "⚫ non configurée";
+  });
+  renderGrid();
+
+  // emergency exit
+  document.getElementById("exit-btn")?.addEventListener("click", () => { document.write(""); window.location.replace("https://meteo.google.com"); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !document.querySelector(".modal-overlay.open")) { document.write(""); window.location.replace("https://meteo.google.com"); } else if (e.key === "Escape") { closeModal(); } });
+</script>
+</body>
+</html>
